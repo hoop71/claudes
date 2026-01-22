@@ -4,6 +4,7 @@ on:
   push:
     tags:
       - 'claude-retro-v*'
+  workflow_dispatch:
 
 jobs:
   publish:
