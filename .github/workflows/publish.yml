@@ -25,7 +25,7 @@ jobs:
 
       - name: Install dependencies
         working-directory: packages/claude-retro
-        run: npm ci
+        run: npm install
 
       - name: Publish to NPM
         working-directory: packages/claude-retro
