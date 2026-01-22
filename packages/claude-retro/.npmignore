@@ -1,0 +1,30 @@
+# Development files
+.git/
+.gitignore
+node_modules/
+npm-debug.log*
+.DS_Store
+
+# Test files
+test/
+tests/
+*.test.js
+coverage/
+
+# Documentation (keep README.md, LICENSE, CONTRIBUTING.md)
+docs/
+.github/
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Temporary files
+*.tmp
+.cache/
+
+# Build artifacts (if any)
+dist/
+build/

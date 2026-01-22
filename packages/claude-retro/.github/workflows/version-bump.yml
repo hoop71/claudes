@@ -1,0 +1,70 @@
+name: Version Bump and Tag
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'packages/claude-retro/**'
+
+jobs:
+  bump-version:
+    runs-on: ubuntu-latest
+
+    # Skip if commit message contains [skip ci] or [skip version]
+    if: "!contains(github.event.head_commit.message, '[skip ci]') && !contains(github.event.head_commit.message, '[skip version]')"
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Configure Git
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Determine version bump type
+        id: bump-type
+        run: |
+          # Get the commit message
+          COMMIT_MSG="${{ github.event.head_commit.message }}"
+
+          # Determine bump type based on conventional commits
+          if echo "$COMMIT_MSG" | grep -qE "^(feat|feature)(\(.+\))?!:|^BREAKING CHANGE:"; then
+            echo "type=major" >> $GITHUB_OUTPUT
+          elif echo "$COMMIT_MSG" | grep -qE "^(feat|feature)(\(.+\))?:"; then
+            echo "type=minor" >> $GITHUB_OUTPUT
+          elif echo "$COMMIT_MSG" | grep -qE "^(fix|bugfix|perf|refactor|docs|style|test|chore)(\(.+\))?:"; then
+            echo "type=patch" >> $GITHUB_OUTPUT
+          else
+            echo "type=patch" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Bump version
+        id: version
+        working-directory: packages/claude-retro
+        run: |
+          BUMP_TYPE="${{ steps.bump-type.outputs.type }}"
+          npm version $BUMP_TYPE -m "chore(claude-retro): bump version to %s [skip ci]"
+          NEW_VERSION=$(node -p "require('./package.json').version")
+          echo "new_version=claude-retro-v${NEW_VERSION}" >> $GITHUB_OUTPUT
+
+      - name: Push changes and tag
+        run: |
+          git push origin main --follow-tags
+
+      - name: Create GitHub Release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh release create ${{ steps.version.outputs.new_version }} \
+            --title "Release ${{ steps.version.outputs.new_version }}" \
+            --generate-notes

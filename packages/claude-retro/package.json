@@ -1,0 +1,61 @@
+{
+  "name": "@hoop71/claude-retro",
+  "version": "0.1.0",
+  "description": "Automated developer retrospectives for any coding tool",
+  "bin": {
+    "claude-retro": "./bin/claude-retro.js"
+  },
+  "main": "index.js",
+  "type": "module",
+  "files": [
+    "bin/",
+    "lib/",
+    "src/",
+    "templates/",
+    "config/",
+    "index.js",
+    "README.md",
+    "LICENSE",
+    "CHANGELOG.md"
+  ],
+  "scripts": {
+    "prepublishOnly": "echo 'Running pre-publish checks...' && node --version"
+  },
+  "engines": {
+    "node": ">=22.0.0"
+  },
+  "dependencies": {
+    "date-fns": "^3.0.6",
+    "ajv": "^8.12.0",
+    "commander": "^12.0.0",
+    "chalk": "^5.3.0",
+    "ora": "^8.0.0",
+    "inquirer": "^9.2.0"
+  },
+  "devDependencies": {
+    "eslint": "^8.56.0",
+    "prettier": "^3.2.0"
+  },
+  "keywords": [
+    "retrospective",
+    "developer-productivity",
+    "git",
+    "jira",
+    "time-tracking",
+    "claude-code",
+    "cursor",
+    "devtools",
+    "analytics"
+  ],
+  "author": "hoop71",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/hoop71/claudes.git",
+    "directory": "packages/claude-retro"
+  },
+  "bugs": {
+    "url": "https://github.com/hoop71/claudes/issues"
+  },
+  "homepage": "https://github.com/hoop71/claudes/tree/main/packages/claude-retro#readme"
+}

@@ -1,0 +1,42 @@
+name: Publish to NPM
+
+on:
+  push:
+    tags:
+      - 'claude-retro-v*'
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          registry-url: 'https://registry.npmjs.org'
+
+      - name: Install dependencies
+        working-directory: packages/claude-retro
+        run: npm ci
+
+      - name: Publish to NPM
+        working-directory: packages/claude-retro
+        run: npm publish --access public
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Create GitHub Release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ github.ref }}
+          release_name: Release ${{ github.ref }}
+          body: |
+            See [CHANGELOG.md](https://github.com/hoop71/claude-retro/blob/main/CHANGELOG.md) for details.
+          draft: false
+          prerelease: false
