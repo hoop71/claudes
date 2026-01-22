@@ -1,12 +1,33 @@
+# Dependencies
 node_modules/
-*.log
-.DS_Store
-.env
-.env.local
+package-lock.json
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Build output
 dist/
 build/
-coverage/
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# IDE
 .vscode/
 .idea/
 *.swp
 *.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Temporary
+*.tmp
+.cache/
+
+# Testing
+coverage/
+.nyc_output/
